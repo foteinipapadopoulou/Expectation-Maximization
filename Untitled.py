@@ -249,6 +249,8 @@ def calculate_log_likelihood(N,D,K,mean,cov_2,pi):
 
 meaninit=np.copy(mean)
 X,mean,cov_2,pi,gamma=EM(X,mean,cov_2,pi)
+np.save("gamma_file_k_3",gamma)
+np.save("mean_file_k_3",mean)
 print( "Final k clusters" )
 print( mean )
 print( "Inital k clusters" )
@@ -263,7 +265,7 @@ plt.imshow(np.reshape(X,(array.shape[0],array.shape[1],array.shape[2])))
 
 # In[ ]:
 
-
-for n in range(N):
+rec_img=np.zeros((X.shape[0],X.shape[1]))
+for n in range(X.shape[0]):
     rec_img[n] = mean[gamma[n].argmax()]
 
