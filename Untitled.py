@@ -33,9 +33,8 @@ array.shape
 
 
 new_img = array.reshape((array.shape[0]*array.shape[1]), array.shape[2])
-new_img.shape
 new_img=new_img/255
-new_img
+
 
 
 # ### Αρχικοποίηση των παραμέτρων : σk^2,πk,μk
@@ -77,12 +76,7 @@ def initialize_mean_cov_pi(X,k):
     return mean ,cov_2, pi
 
 
-# In[6]:
 
-
-K=3
-mean , cov_2 , pi = initialize_mean_cov_pi(new_img,K)
-X=new_img
 
 
 # In[157]:
@@ -118,6 +112,7 @@ def EM(X,mean,cov_2,pi):
             break
         Jold = J
     plot_costs(costs)
+    np.save("costs_k_" + str(K),costs)
     return X, mean, cov_2 , pi ,gamma
 
 
@@ -159,13 +154,10 @@ def gamma_fun(X,N,K,mean,cov_2,pi):
 
 
 def plot_costs(costs):
-    x = range(1, len(costs)+1)
-    y = costs
-    plt.plot(x, y)
-    plt.ylabel('cost')
-    plt.xlabel('iterations')
-    plt.title("Cost Function =")
-    plt.xticks(x)
+    plt.plot(costs)
+    plt.ylabel('log likelihood')
+    plt.xlabel('iterations ')
+    plt.title("Log likelihood ")
     plt.show()
 
 
@@ -244,28 +236,22 @@ def calculate_log_likelihood(N,D,K,mean,cov_2,pi):
     return sum2
 
 
-# In[ ]:
-
+K=4
+mean , cov_2 , pi = initialize_mean_cov_pi(new_img,K)
+X=new_img
 
 meaninit=np.copy(mean)
 X,mean,cov_2,pi,gamma=EM(X,mean,cov_2,pi)
-np.save("gamma_file_k_3",gamma)
-np.save("mean_file_k_3",mean)
+np.save("gamma_file_k_"+str(K),gamma)
+np.save("mean_file_k_"+str(K),mean)
 print( "Final k clusters" )
 print( mean )
 print( "Inital k clusters" )
 print( meaninit )
 
-
-# In[ ]:
-
-
-plt.imshow(np.reshape(X,(array.shape[0],array.shape[1],array.shape[2])))
-
-
-# In[ ]:
-
 rec_img=np.zeros((X.shape[0],X.shape[1]))
 for n in range(X.shape[0]):
     rec_img[n] = mean[gamma[n].argmax()]
 
+plt.imshow(np.reshape(rec_img,(array.shape[0],array.shape[1],array.shape[2])))
+plt.show()
