@@ -255,3 +255,7 @@ for n in range(X.shape[0]):
 
 plt.imshow(np.reshape(rec_img,(array.shape[0],array.shape[1],array.shape[2])))
 plt.show()
+from numpy import linalg as LA
+N=rec_img.shape[0]
+error=np.square(LA.norm(new_img-rec_img))/N
+print(error)
